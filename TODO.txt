@@ -1,0 +1,9 @@
+Debug the game.
+
+Decide on the GUI of choice:
+
+1. Python app GUI
+
+2. Flask App WEB GUI
+
+3. Something else
