@@ -426,7 +426,6 @@ def check_jail(player_name):
     return False
 
 def jail_player_old(player_name):
-    #TODO change structure to get player object rather than name
     global players
     global jail
 
@@ -473,8 +472,6 @@ def jail_player(player, field_penalty):
     print(f"{player} paid the penalty and is released from jail.")
     players[player]['position'] = 10
 
-
-
 def load_players():
     global players
     print("Input player names, separated by commas:")
@@ -513,6 +510,7 @@ def transfer_money(player_from, player_to, amount):
     return True
 
 def handle_card_land(field_info, player):
+    global players
     if field_info['name'] == 'Kaj Sad?':
         card = vuci_kaj_sad()
         print(f"You drew a card: {card['description']}")
@@ -533,8 +531,7 @@ def handle_card_land(field_info, player):
                 #TODO implement nearest dialect move
                 pass
             elif isinstance(card['move'], int):
-                player['position'] += card['move']
-                print(f"You moved {card['move']} spaces.")
+                pass
         if card['jail'] is not None:
             if card['jail'] == 'in':
                 jail_player(player['name'])
