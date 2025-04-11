@@ -1,20 +1,45 @@
+// src/components/Lobby.js
 import React from 'react';
+import '../styles/Lobby.css';
 
-const Lobby = ({ players, startGame }) => {
+const Lobby = ({ players, startGame, currentPlayer }) => {
+  const canStartGame = players.length >= 2 && players[0].username === currentPlayer;
+
   return (
-    <div id="lobby-container">
-      <h2>Lobby</h2>
-      <h3>Players</h3>
-      <ul id="players-list">
-        {players.map((player, index) => (
-          <li key={index} style={{ color: player.color }}>
-            {player.username}
-          </li>
-        ))}
-      </ul>
-      <button onClick={startGame} id="start-game-btn">
-        Start Game
-      </button>
+    <div className="lobby-container">
+      <div className="lobby-card">
+        <h2>Game Lobby</h2>
+        <p>Waiting for players to join...</p>
+        
+        <div className="players-grid">
+          {players.map((player, index) => (
+            <div 
+              key={index} 
+              className="player-badge"
+              style={{ borderColor: player.color }}
+            >
+              <div 
+                className="badge-color" 
+                style={{ backgroundColor: player.color }}
+              ></div>
+              <span>{player.username}</span>
+            </div>
+          ))}
+        </div>
+
+        {canStartGame && (
+          <button 
+            onClick={startGame} 
+            className="start-button"
+          >
+            Start Game
+          </button>
+        )}
+        
+        {!canStartGame && players.length > 0 && players[0].username !== currentPlayer && (
+          <p className="waiting-message">Waiting for host to start the game...</p>
+        )}
+      </div>
     </div>
   );
 };

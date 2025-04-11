@@ -1,28 +1,95 @@
 /* src/styles/UserSetup.css */
-#user-setup {
+.setup-container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    margin-top: 50px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   }
   
-  #user-setup input {
-    margin: 10px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  .setup-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
   }
   
-  #user-setup button {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
+  .setup-card h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+  }
+  
+  .input-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #7f8c8d;
+    font-weight: 500;
+  }
+  
+  .input-group input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+  }
+  
+  .input-group input[type="text"]:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+  
+  .color-picker-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .color-picker-container input[type="color"] {
+    width: 50px;
+    height: 50px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
   }
   
-  #user-setup button:disabled {
-    background-color: #6c757d;
+  .color-value {
+    font-family: monospace;
+    font-size: 1rem;
+    color: #34495e;
   }
   
+  .join-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 1rem;
+    transition: all 0.3s;
+  }
+  
+  .join-btn:hover {
+    background: #2ecc71;
+    transform: translateY(-2px);
+  }
+  
+  .join-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+    transform: none;
+  }

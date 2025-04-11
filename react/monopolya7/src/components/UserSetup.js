@@ -2,29 +2,41 @@
 import React from 'react';
 import '../styles/UserSetup.css';
 
-const UserSetup = ({ username, setUsername, color, setColor, joinGame, isGameStarted }) => {
+const UserSetup = ({ username, setUsername, color, setColor, joinGame }) => {
   return (
-    <div id="user-setup">
-      {!isGameStarted ? (
-        <>
+    <div className="setup-container">
+      <div className="setup-card">
+        <h2>Join Monopoly Game</h2>
+        <div className="input-group">
+          <label htmlFor="username">Player Name</label>
           <input
             type="text"
             id="username"
-            placeholder="Enter username"
+            placeholder="Enter your name"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          <input
-            type="color"
-            id="color-picker"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          />
-          <button onClick={joinGame}>Join Game</button>
-        </>
-      ) : (
-        <button onClick={joinGame} disabled={isGameStarted}>Start Game</button>
-      )}
+        </div>
+        <div className="input-group">
+          <label htmlFor="color-picker">Choose Color</label>
+          <div className="color-picker-container">
+            <input
+              type="color"
+              id="color-picker"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+            />
+            <span className="color-value">{color || '#000000'}</span>
+          </div>
+        </div>
+        <button 
+          onClick={joinGame} 
+          className="join-btn"
+          disabled={!username || !color}
+        >
+          Join Game
+        </button>
+      </div>
     </div>
   );
 };

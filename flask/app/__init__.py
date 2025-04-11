@@ -1,22 +1,36 @@
-# app/__init__.py
 from flask import Flask
 from flask_socketio import SocketIO
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS
 import secrets
+from datetime import timedelta
 
-socketio = SocketIO()  # Initialize SocketIO
+socketio = SocketIO()
 
 def create_app():
-    app = Flask(__name__)  # Initialize Flask app
+    app = Flask(__name__)
     app.secret_key = secrets.token_hex(16)
-    # Enable CORS for all routes and SocketIO
-    CORS(app, supports_credentials=True)  # This will allow all domains, adjust the origins if needed
     
-    # Initialize SocketIO with the Flask app
-    socketio.init_app(app, cors_allowed_origins="*")  # Allow cross-origin requests for SocketIO
+    # Configure CORS with explicit settings
+    CORS(app, 
+         supports_credentials=True,
+         resources={
+             r"/*": {
+                 "origins": ["http://localhost:3000"],
+                 "allow_headers": ["Content-Type"],
+                 "methods": ["GET", "POST", "OPTIONS"]
+             }
+         })
     
-    # Import the routes and register the blueprint
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
+    app.config['SESSION_COOKIE_SECURE'] = False  # For development only
+    app.config['SESSION_COOKIE_HTTPONLY'] = True
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Helps with cross-origin cookies
+    
+    socketio.init_app(app, 
+                     cors_allowed_origins="http://localhost:3000",
+                     manage_session=False)  # Let Flask handle sessions
+    
     from app.routes import main_blueprint
     app.register_blueprint(main_blueprint)
 
-    return app, socketio  # Return both app and socketio instances
+    return app, socketio

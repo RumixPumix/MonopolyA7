@@ -2,28 +2,53 @@
 import React from 'react';
 import '../styles/GameBoard.css';
 
-const GameBoard = ({ players, boardImage, positions }) => {
+const GameBoard = ({ players, boardImage, positions, currentPlayer }) => {
   return (
-    <div id="game-board">
-      <img src={boardImage} alt="Game Board" className="board-image" />
-      <div id="players-container">
+    <div className="game-container">
+      <div className="board-container">
+        <img 
+          src={boardImage} 
+          alt="Monopoly Board" 
+          className="board-image" 
+        />
+        
         {players.map((player, index) => {
-          const playerPosition = positions[index] || { top: '0px', left: '0px' };
+          const isCurrent = player.username === currentPlayer;
           return (
             <div
               key={index}
-              className="player"
+              className={`player-token ${isCurrent ? 'active' : ''}`}
               style={{
                 backgroundColor: player.color,
-                position: 'absolute',
-                top: playerPosition.top,
-                left: playerPosition.left,
+                top: positions[index]?.top || '50%',
+                left: positions[index]?.left || '50%',
               }}
             >
-              {player.username}
+              <span className="player-initial">
+                {player.username.charAt(0).toUpperCase()}
+              </span>
+              {isCurrent && <div className="player-pulse"></div>}
             </div>
           );
         })}
+      </div>
+      
+      <div className="player-panel">
+        <h3>Players</h3>
+        <div className="player-list">
+          {players.map((player, index) => (
+            <div 
+              key={index} 
+              className={`player-info ${player.username === currentPlayer ? 'current' : ''}`}
+            >
+              <div 
+                className="player-color" 
+                style={{ backgroundColor: player.color }}
+              ></div>
+              <span>{player.username}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

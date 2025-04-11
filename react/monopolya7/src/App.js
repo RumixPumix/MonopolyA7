@@ -3,10 +3,15 @@ import './styles.css';
 import { joinGameApi, startGameApi } from './api/api';
 import UserSetup from './components/UserSetup';
 import GameBoard from './components/GameBoard';
-import Lobby from './components/Lobby'; // Importing the Lobby component
+import Lobby from './components/Lobby';
 import io from 'socket.io-client';
 
-const socket = io('http://127.0.0.1:5000'); // Connect to Flask backend via Socket.IO
+const socket = io('http://127.0.0.1:5000', {
+  withCredentials: true,
+  reconnection: true,
+  reconnectionAttempts: 5,
+  reconnectionDelay: 1000,
+});
 
 const App = () => {
   const [isJoined, setIsJoined] = useState(false);
@@ -18,49 +23,84 @@ const App = () => {
   const [positions, setPositions] = useState([]);
 
   useEffect(() => {
-
     const reconnectGame = async () => {
-      const response = await fetch('http://127.0.0.1:5000/reconnect', {
-        method: 'POST',
-        credentials: 'include'  // <-- THIS is required
-      });
-      const data = await response.json();
-    
-      if (data.success) {
-        if (data.game_started) {
-          setUsername(data.username);
-          setColor(data.color);
-          setIsJoined(true);  // Allow them to join the game directly
+      try {
+        const response = await fetch('http://127.0.0.1:5000/reconnect', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          if (data.username) {
+            setUsername(data.username);
+            setColor(data.color);
+            setIsJoined(true);
+            setPlayers(data.players || []);
+            setIsGameStarted(data.game_started || false);
+            
+            if (data.game_started) {
+              socket.emit('request_game_state');
+            }
+          }
         }
-      } else {
-        alert('Failed to reconnect');
+      } catch (error) {
+        console.error('Reconnection error:', error);
       }
     };
 
-    reconnectGame();
+    if (!username) {
+      reconnectGame();
+    }
 
-    // Listen for player updates via Socket.IO
+    socket.on('connect', () => {
+      console.log('Connected to server with socket ID:', socket.id);
+      if (username) {
+        // If we have a username but reconnected, update the server
+        socket.emit('update_sid', { username, sid: socket.id });
+      }
+    });
+
     socket.on('update_players', (data) => {
       setPlayers(data.players);
     });
-  
+
     socket.on('start_game', (data) => {
-      console.log(data.message); // Log the message or update your state to reflect that the game has started
-      setIsGameStarted(true); // Update state to start the game
+      setIsGameStarted(true);
+      if (data.positions) {
+        setPositions(data.positions);
+      }
     });
-  
+
+    socket.on('game_state', (data) => {
+      if (data.players) {
+        setPlayers(data.players);
+      }
+      if (data.positions) {
+        setPositions(data.positions);
+      }
+      setIsGameStarted(true);
+    });
+
     return () => {
-      socket.off('update_players'); // Clean up when the component is unmounted
-      socket.off('game_started');
+      socket.off('connect');
+      socket.off('update_players');
+      socket.off('start_game');
+      socket.off('game_state');
     };
-  }, []);
+  }, [username]);
 
   const joinGame = async () => {
     const response = await joinGameApi(username, color, socket.id);
     if (response.success) {
       setIsJoined(true);
+      setPlayers(response.players || []);
     } else {
-      alert('Failed to join the game');
+      alert(response.error || 'Failed to join the game');
     }
   };
 
@@ -70,7 +110,7 @@ const App = () => {
       setPositions(response.positions);
       setIsGameStarted(true);
     } else {
-      alert('Failed to start the game');
+      alert(response.error || 'Failed to start the game');
     }
   };
 
@@ -83,13 +123,20 @@ const App = () => {
           color={color}
           setColor={setColor}
           joinGame={joinGame}
-          startGame={startGame}
-          isGameStarted={isGameStarted}
         />
       ) : isGameStarted ? (
-        <GameBoard players={players} boardImage={boardImage} positions={positions} />
+        <GameBoard 
+          players={players} 
+          boardImage={boardImage} 
+          positions={positions} 
+          currentPlayer={username}
+        />
       ) : (
-        <Lobby players={players} startGame={startGame} />
+        <Lobby 
+          players={players} 
+          startGame={startGame} 
+          currentPlayer={username}
+        />
       )}
     </div>
   );
