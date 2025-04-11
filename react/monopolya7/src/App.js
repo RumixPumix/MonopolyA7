@@ -9,8 +9,13 @@ import io from 'socket.io-client';
 const socket = io('http://127.0.0.1:5000', {
   withCredentials: true,
   reconnection: true,
-  reconnectionAttempts: 5,
+  reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
+  transports: ['websocket', 'polling'],
+  autoConnect: true,
+  extraHeaders: {
+    "Access-Control-Allow-Origin": "http://localhost:3000"
+  }
 });
 
 const App = () => {
@@ -21,6 +26,24 @@ const App = () => {
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [boardImage, setBoardImage] = useState('monopoly-board.png');
   const [positions, setPositions] = useState([]);
+  const [gameState, setGameState] = useState({
+    currentPlayer: '',
+    players: [],
+    currentProperty: null,
+    currentAction: 'none',
+    currentOwner: '',
+    rentAmount: 0,
+    diceRolled: false,
+    canEndTurn: false,
+    logs: []
+  });
+
+  // Game action handlers
+  const handleRollDice = () => socket.emit('roll_dice');
+  const handleBuyProperty = () => socket.emit('buy_property');
+  const handlePayRent = () => socket.emit('pay_rent');
+  const handleEndTurn = () => socket.emit('end_turn');
+  const handleInitiateTrade = (player) => socket.emit('initiate_trade', { target: player.username });
 
   useEffect(() => {
     const reconnectGame = async () => {
@@ -60,7 +83,6 @@ const App = () => {
     socket.on('connect', () => {
       console.log('Connected to server with socket ID:', socket.id);
       if (username) {
-        // If we have a username but reconnected, update the server
         socket.emit('update_sid', { username, sid: socket.id });
       }
     });
@@ -77,12 +99,14 @@ const App = () => {
     });
 
     socket.on('game_state', (data) => {
-      if (data.players) {
-        setPlayers(data.players);
-      }
-      if (data.positions) {
-        setPositions(data.positions);
-      }
+      setGameState(prev => ({
+        ...prev,
+        ...data,
+        players: data.players || prev.players,
+        logs: data.logs || prev.logs
+      }));
+      if (data.players) setPlayers(data.players);
+      if (data.positions) setPositions(data.positions);
       setIsGameStarted(true);
     });
 
@@ -130,6 +154,12 @@ const App = () => {
           boardImage={boardImage} 
           positions={positions} 
           currentPlayer={username}
+          gameState={gameState}
+          onRollDice={handleRollDice}
+          onBuyProperty={handleBuyProperty}
+          onPayRent={handlePayRent}
+          onEndTurn={handleEndTurn}
+          onTrade={handleInitiateTrade}
         />
       ) : (
         <Lobby 

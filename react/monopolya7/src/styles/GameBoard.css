@@ -1,27 +1,35 @@
 /* src/styles/GameBoard.css */
+/* Main Game Container */
 .game-container {
     display: flex;
-    height: 100vh;
-    background: #f8f9fa;
+    width: 100%;
+    max-width: 1200px;
+    height: 90vh;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
   }
   
+  /* Board Area */
   .board-container {
     position: relative;
     flex: 3;
-    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     background: #f1f3f5;
+    padding: 20px;
   }
   
   .board-image {
     max-width: 100%;
-    max-height: 90vh;
+    max-height: 100%;
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
   
+  /* Player Tokens */
   .player-token {
     position: absolute;
     width: 40px;
@@ -61,60 +69,321 @@
   }
   
   @keyframes pulse-animation {
-    0% {
-      transform: scale(1);
-      opacity: 0.7;
-    }
-    70% {
-      transform: scale(1.5);
-      opacity: 0;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 0;
-    }
+    0% { transform: scale(1); opacity: 0.7; }
+    70% { transform: scale(1.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 0; }
   }
   
+  /* Player Panel */
   .player-panel {
     flex: 1;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
     background: white;
     border-left: 1px solid #e0e0e0;
     overflow-y: auto;
-  }
-  
-  .player-panel h3 {
-    color: #2c3e50;
-    margin-bottom: 1.5rem;
-    font-size: 1.5rem;
-    border-bottom: 2px solid #f1f3f5;
-    padding-bottom: 10px;
+    padding: 20px;
   }
   
   .player-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-bottom: 20px;
   }
   
   .player-info {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 12px;
     border-radius: 8px;
     transition: all 0.2s;
+    background: #f8f9fa;
   }
   
   .player-info.current {
-    background: #f8f9fa;
+    background: #e3f2fd;
     font-weight: bold;
   }
   
   .player-color {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     margin-right: 12px;
     border: 2px solid white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .player-cash {
+    margin-left: auto;
+    font-weight: bold;
+    color: #27ae60;
+  }
+  
+  .trade-button {
+    margin-left: 10px;
+    padding: 6px 12px;
+    background: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.2s;
+  }
+  
+  .trade-button:hover {
+    background: #e67e22;
+  }
+  
+  /* Game Controls */
+  .game-controls {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
+  
+  .control-button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+  }
+  
+  .roll-dice {
+    background: #3498db;
+    color: white;
+  }
+  
+  .roll-dice:hover {
+    background: #2980b9;
+  }
+  
+  .end-turn {
+    background: #95a5a6;
+    color: white;
+  }
+  
+  .end-turn:hover {
+    background: #7f8c8d;
+  }
+  
+  /* Action Panels */
+  .action-panel {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    border-left: 5px solid;
+  }
+  
+  .property-purchase {
+    border-left-color: #27ae60;
+  }
+  
+  .rent-payment {
+    border-left-color: #e74c3c;
+  }
+  
+  .property-info {
+    margin: 10px 0;
+  }
+  
+  .property-info h5 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+  }
+  
+  .rent-amount {
+    font-weight: bold;
+    color: #c0392b;
+    font-size: 1.1rem;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .action-button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .buy {
+    background: #27ae60;
+    color: white;
+  }
+  
+  .buy:hover {
+    background: #219653;
+  }
+  
+  .decline {
+    background: #f39c12;
+    color: white;
+  }
+  
+  .decline:hover {
+    background: #e67e22;
+  }
+  
+  .pay-rent {
+    background: #e74c3c;
+    color: white;
+    width: 100%;
+  }
+  
+  .pay-rent:hover {
+    background: #c0392b;
+  }
+  
+  /* Game Log */
+  .game-log {
+    margin-top: 20px;
+  }
+  
+  .game-log h4 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+  
+  .log-entries {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  
+  .log-entry {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+  }
+  
+  .log-entry:last-child {
+    border-bottom: none;
+  }
+  
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .trade-modal {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  }
+  
+  .trade-modal h3 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .trade-players {
+    margin: 15px 0;
+  }
+  
+  .trade-player-option button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background: #ecf0f1;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+  }
+  
+  .trade-player-option button:hover {
+    background: #bdc3c7;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  .modal-button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+  }
+  
+  .cancel {
+    background: #e74c3c;
+    color: white;
+  }
+  
+  .cancel:hover {
+    background: #c0392b;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .game-container {
+      flex-direction: column;
+      height: auto;
+    }
+    
+    .board-container {
+      padding: 10px;
+    }
+    
+    .player-panel {
+      border-left: none;
+      border-top: 1px solid #e0e0e0;
+    }
+    
+    .player-token {
+      width: 30px;
+      height: 30px;
+      font-size: 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .action-buttons {
+      flex-direction: column;
+    }
+    
+    .trade-modal {
+      padding: 15px;
+    }
   }
