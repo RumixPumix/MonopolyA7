@@ -30,7 +30,7 @@ kaj_sad_karte = {
         "penalty": None,
         "bonus": None,
         "move": None,
-        "jail": "out"
+        "jail": False
     },
     "card2": {
         "description": "zajebo si brojanje plati 50 kuna kaznu",
@@ -425,25 +425,6 @@ def check_jail(player_name):
         return True
     return False
 
-def jail_player_old(player_name):
-    global players
-    global jail
-
-    # Find the player index by name
-    player_index = None
-    for index, player in players.items():
-        if player['name'] == player_name:
-            player_index = index
-            break
-
-    if player_index is None:
-        print(f"Player {player_name} not found.")
-        return
-
-    players[player_index]['position'] = 10  # Jail position
-    jail[player_name] = {'turn': 0}
-    print(f"{player_name} has been sent to jail.")
-
 def jail_player(player, field_penalty):
     global players
     global jail_money
@@ -471,6 +452,7 @@ def jail_player(player, field_penalty):
     jail_money += field_penalty
     print(f"{player} paid the penalty and is released from jail.")
     players[player]['position'] = 10
+    return True
 
 def load_players():
     global players
@@ -517,7 +499,7 @@ def handle_card_land(field_info, player):
         if card['penalty'] is not None:
             if player['money'] < card['penalty']:
                 print("You don't have enough money to pay the penalty.")
-                return False
+                return False, card['penalty']
             player['money'] -= card['penalty']
             print(f"You paid {card['penalty']} penalty.")
         if card['bonus'] is not None:
@@ -546,7 +528,7 @@ def handle_card_land(field_info, player):
         if card['penalty'] is not None:
             if player['money'] < card['penalty']:
                 print("You don't have enough money to pay the penalty.")
-                return False
+                return False, card['penalty']
             player['money'] -= card['penalty']
             print(f"You paid {card['penalty']} penalty.")
         if card['bonus'] is not None:
@@ -578,7 +560,7 @@ def handle_special_field(field_info, player):
     elif field_info['name'] == 'Zatvor':
         pass
     elif field_info['name'] == 'Edo Time':
-        jail_player(player, field_info['penalty'])
+        return jail_player(player, field_info['penalty'])
     elif field_info['name'] == 'Free Zaza':
         player['money'] += jail_money
         print(f"You received {jail_money} from the bank.")
@@ -588,7 +570,7 @@ def handle_special_field(field_info, player):
 def handle_tax(field_info, player):
     if player['money'] < field_info['amount']:
         print("You don't have enough money to pay the tax.")
-        return False
+        return False, field_info['amount']
     player['money'] -= field_info['amount']
     print(f"You paid {field_info['amount']} in taxes.")
     return True
@@ -597,24 +579,24 @@ def handle_dialect(field_info, player):
     if field_info["owner"] is None:
         if player['money'] < field_info['price']:
             print("You don't have enough money to buy this dialect.")
-            return False
+            return True
         print(f"You can buy {field_info['name']} for {field_info['price']}.")
         choice = input("Do you want to buy it? (yes/no): ").strip().lower()
         if choice != 'yes':
             print("You chose not to buy the dialect.")
-            return False
+            return True
         player['money'] -= field_info['price']
         field_info["owner"] = player["name"]
         print(f"You bought {field_info['name']} for {field_info['price']}")
     else:
         if field_info["owner"] == player["name"]:
             print("You already own this dialect.")
-            return False
+            return True
         #TODO  ----VALJDA RADI??--- prvobitno promjenit kolicinu rente bazno, zatim implementat da se provjeri koliko biznisa posjeduje da se renta povecava.
         rent = field_info['rent']
         if player['money'] < rent:
             print("You don't have enough money to pay the rent.")
-            return False
+            return False, field_info['rent']
         transfer_money(player["name"], field_info["owner"], rent)
         return True
 
@@ -622,23 +604,24 @@ def handle_business(field_info, player, dice_rolled):
     if field_info["owner"] is None:
         if player['money'] < field_info['price']:
             print("You don't have enough money to buy this property.")
-            return False
+            return True
         print(f"You can buy {field_info['name']} for {field_info['price']}.")
         choice = input("Do you want to buy it? (yes/no): ").strip().lower()
         if choice != 'yes':
             print("You chose not to buy the property.")
-            return False
+            return True
         player['money'] -= field_info['price']
         field_info["owner"] = player["name"]
         print(f"You bought {field_info['name']} for {field_info['price']}")
+        return True
     else:
         if field_info["owner"] == player["name"]:
             print("You already own this property.")
-            return False
+            return True
         rent = field_info['rent'] * dice_rolled
         if player['money'] < rent:
             print("You don't have enough money to pay the rent.")
-            return False
+            return False, rent
         transfer_money(player["name"], field_info["owner"], rent)
         print(f"You paid {rent} rent to {field_info['owner']}")
         return True
@@ -652,10 +635,11 @@ def handle_city(field_info, player, monopoly_map, field_key):
         choice = input("Do you want to buy it? (yes/no): ").strip().lower()
         if choice != 'yes':
             print("You chose not to buy the property.")
-            return False
+            return True
         player['money'] -= field_info['price']
         field_info["owner"] = player["name"]
         print(f"You bought {field_info['name']} for {field_info['price']}")
+        return True
     else:
         if field_info["owner"] == player["name"]:
             print("You already own this property.")
@@ -672,7 +656,7 @@ def handle_city(field_info, player, monopoly_map, field_key):
                 upgrade_cost = field_info['property_cost']
                 if player['money'] < upgrade_cost:
                     print("You don't have enough money to upgrade this property.")
-                    return False
+                    return True
                 choice = input(f"Do you want to upgrade this property for {upgrade_cost}? (yes/no): ").strip().lower()
                 if choice == 'yes':
                     player['money'] -= upgrade_cost
@@ -687,10 +671,18 @@ def handle_city(field_info, player, monopoly_map, field_key):
             rent = field_info['rent']
         if player['money'] < rent:
             print("You don't have enough money to pay the rent.")
-            return False
+            return False, rent
         transfer_money(player["name"], field_info["owner"], rent)
         print(f"You paid {rent} rent to {field_info['owner']}")
         return True
+
+def handle_no_money(player, owed, monpoly_map):
+    global players
+    if player['money'] < owed:
+        print(f"{player['name']} is bankrupt!")
+        #TODO implement bankruptcy logic here
+        return False
+    return True
 
 def start_game(monopoly_map):
     global players
@@ -699,7 +691,7 @@ def start_game(monopoly_map):
     while True:
         print(f"{players[current_player]['name']}'s turn.")
         print(f"Current position: {players[current_player]['position']}")
-        print(f"Current balance: {players[current_player]['money']}")
+        print(f"Current balance: {players[current_player]['money']}kn")
         input("Press Enter to roll the dice.")
         old_position = players[current_player]['position']
         roll1, roll2 = dice_roll()
@@ -730,10 +722,6 @@ def start_game(monopoly_map):
             result = handle_special_field(field_info, players[current_player])
         elif field_info['type'] == 'tax':
             result = handle_tax(field_info, players[current_player])
-            if not result:
-                players.pop(current_player)
-                print(f"{players[current_player]['name']} is out of the game.")
-                print(f"Remaining players: {len(players)}")
         elif field_info['type'] == 'dialect':
             result = handle_dialect(field_info, players[current_player])
         elif field_info['type'] == 'business':
@@ -744,6 +732,16 @@ def start_game(monopoly_map):
             result = handle_card_land(field_info, players[current_player])
         else:
             print("Unknown field type.")
+
+        if isinstance(result, tuple):
+            status = result[0]
+            penalty = result[1]
+            if not status:
+                print(f"You don't have enough money to pay the penalty of {penalty}.")
+                if not handle_no_money(players[current_player], penalty, monopoly_map):
+                    players.pop(current_player)
+                    print(f"{players[current_player]['name']} is bankrupt!")
+                continue
 
         # Handle field actions here (buy, pay rent, etc.)
         print(f"Your current balance: {players[current_player]['money']}")
