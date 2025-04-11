@@ -37,7 +37,7 @@ Currently being developed in **Python** — final platform (GUI or Web via Flask
 | Tkinter/PyQt5 (TBD)     | GUI-based version    |
 | Socket / Flask-SocketIO | Real-time multiplayer|
 | SQLite / MongoDB        | Game state storage   |
-|------------------------------------------------|
+
 
 ## 🚀 Getting Started
 
