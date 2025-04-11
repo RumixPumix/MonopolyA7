@@ -8,7 +8,7 @@ Currently being developed in **Python** — final platform (GUI or Web via Flask
 ## 🚧 Project Status
 
 > 🛠 In development  
-> UI Design: **TBD** (either Python GUI or Flask-based web app)  
+> UI Design: React with Flask as backend 
 > Multiplayer functionality, game logic, and custom rules are actively being built.
 
 ---
@@ -24,7 +24,6 @@ Currently being developed in **Python** — final platform (GUI or Web via Flask
   - Funny Businesses
 - 📊 **Player Stats, History, and Logs**
 - 🔐 **Secure Backend for Online Play** (Flask)
-- 💾 **Save & Load Game State**
 
 ---
 
@@ -33,10 +32,10 @@ Currently being developed in **Python** — final platform (GUI or Web via Flask
 | Technology              | Purpose              |
 |-------------------------|----------------------|
 | Python                  | Core game logic      |
-| Flask (TBD)             | Web-based version    |
-| Tkinter/PyQt5 (TBD)     | GUI-based version    |
-| Socket / Flask-SocketIO | Real-time multiplayer|
-| SQLite / MongoDB        | Game state storage   |
+| Flask                   | Web-backend          |
+| React                   | Web-frontend         |
+| Flask-SocketIO          | Real-time multiplayer|
+| SQLite / MongoDB        | Player stats storage |
 
 
 ## 🚀 Getting Started
@@ -46,15 +45,17 @@ Currently being developed in **Python** — final platform (GUI or Web via Flask
 For now, make sure you have:
 - Python 3.10+
 - (Optional) Flask: `pip install flask`
-- (Optional) PyQt5: `pip install pyqt5`
-- (Optional) Tkinter: usually comes with Python
+- (Optional) React: `pip install React`
+- (Optional) NPM: `https://nodejs.org/en/download`
 
 ---
 
 ## 📸 Sneak Peek
 
-> TODO
-> 
+> ![image](https://github.com/user-attachments/assets/a1ae933f-99f5-442a-ae6b-bd3169022500)
+
+> ![image](https://github.com/user-attachments/assets/0dfbe5b3-f49b-4d5a-b215-6e96e424ab71)
+
 
 ---
 
@@ -80,4 +81,4 @@ Feel free to reach out if you’re interested in collaborating or want to test t
 
 ---
 
-*Made with love & caffeine ☕ by [Rumix]*
+*Made with love & caffeine ☕ by [Rumix],[MNinna],[ZergX5],[Tena]*
