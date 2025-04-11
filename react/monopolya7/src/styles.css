@@ -1,0 +1,133 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f1f5f8;
+}
+
+/* Game Container Styling */
+#game-container {
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    max-width: 100%;
+}
+
+/* User Setup (Input Fields & Button) */
+#user-setup {
+    margin-bottom: 30px;
+}
+
+#username, #color-picker {
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
+}
+
+#username:focus, #color-picker:focus {
+    border-color: #2a9d8f;
+    outline: none;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #2a9d8f;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #21867a;
+}
+
+/* Game Board Styling */
+#game-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#players-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.player {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    margin: 5px;
+    background-color: #ff6f61;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.player:hover {
+    transform: scale(1.1);
+}
+
+#roll-dice {
+    padding: 12px 24px;
+    font-size: 18px;
+    background-color: #f4a261;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    width: 200px;
+}
+
+#roll-dice:hover {
+    background-color: #e76f51;
+}
+
+/* Media Query for Mobile Responsiveness */
+@media (max-width: 600px) {
+    #game-container {
+        padding: 20px;
+        width: 90%;
+    }
+
+    .player {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    #roll-dice {
+        width: 100%;
+    }
+}
