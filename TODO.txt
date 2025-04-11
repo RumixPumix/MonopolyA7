@@ -6,4 +6,4 @@ Decide on the GUI of choice:
 
 2. Flask App WEB GUI
 
-3. Something else
+3. Disable purchase on first turn.

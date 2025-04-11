@@ -1,0 +1,31 @@
+/* src/styles/GameBoard.css */
+#game-board {
+    position: relative;
+    width: 100%;
+    height: 900px;
+    background-color: #f4f4f4;
+  }
+  
+  .board-image {
+    width: 100%;
+    height: 100%;
+  }
+  
+  #players-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .player {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+  }
+  

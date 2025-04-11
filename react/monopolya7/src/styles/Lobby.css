@@ -1,0 +1,33 @@
+/* src/styles/Lobby.css */
+#lobby {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  #lobby ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #lobby li {
+    margin: 10px;
+  }
+  
+  .player-box {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    color: white;
+  }
+  
+  #lobby button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
