@@ -1,7 +1,7 @@
 # 🎲 Custom MonopolyA7 Game
 
 A multiplayer, custom-designed **Monopoly-style board game**, reimagined with unique mechanics, local dialects, special business logic, and region-based twists!  
-Currently being developed in **Python** — final platform (GUI or Web via Flask) to be determined.
+Currently being developed in **Python / Flask / React**
 
 ---
 
