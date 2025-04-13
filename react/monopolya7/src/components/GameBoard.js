@@ -3,7 +3,7 @@ import '../styles/GameBoard.css';
 
 const GameBoard = ({ 
   players = [], 
-  boardImage = 'monopoly-board.png', 
+  boardImage = 'monopoly-board.png',
   positions = [], 
   currentPlayer = '',
   onRollDice = () => console.log('Roll dice'),

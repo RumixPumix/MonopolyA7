@@ -1,5 +1,15 @@
 import random
 
+def djuksic(ime, prezime):
+    dictionaaryi = {
+        "kljuc":"Value",
+        "ime":ime,
+        "prezime":prezime
+    }
+    return dictionaaryi
+
+print(djuksic("Niko", "Dukic"))
+
 fields = {}
 players = {}
 jail = {}
